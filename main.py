@@ -2,8 +2,6 @@ from address_book import AddressBook
 from cli_bot import add_contact, change_contact, parse_input, show_all, show_phone
 
 book = AddressBook()
-print("Welcome to the assistant bot!")
-
 commands = {
     "hello": lambda args: "How can I help you?",
     "add": lambda args: add_contact(args, contacts),
@@ -13,6 +11,8 @@ commands = {
     "exit": lambda args: "Good bye!",
     "close": lambda args: "Good bye!",
 }
+
+print("Welcome to the assistant bot!")
 
 while True:
     user_input = input("Enter a command: ")
