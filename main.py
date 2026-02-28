@@ -1,27 +1,33 @@
 from address_book import AddressBook
-from cli_bot import add_contact, change_contact, parse_input, show_all, show_phone
+
+def parse_input(user_input: str) -> tuple[str, list[str]]:
+    """Розбирає введений рядок на команду та аргументи"""
+    cmd, *args = user_input.strip().split()
+    return cmd.lower(), args
 
 book = AddressBook()
 commands = {
-    "hello": lambda args: "How can I help you?",
-    "add": lambda args: add_contact(args, contacts),
-    "change": lambda args: change_contact(args, contacts),
-    "phone": lambda args: show_phone(args, contacts),
-    "all": lambda args: show_all(contacts),
-    "exit": lambda args: "Good bye!",
-    "close": lambda args: "Good bye!",
+    "hello": lambda: "How can I help you?",
+    "add": book.add_contact,
+    "change": book.change_contact,
+    "phone": book.show_phone,
+    "all": book.show_all,
+    "add-birthday": book.add_birthday,
+    "show-birthday": book.show_birthday,
+    "birthdays": book.show_upcoming_birthdays,
 }
 
 print("Welcome to the assistant bot!")
 
 while True:
     user_input = input("Enter a command: ")
-    command, *args = parse_input(user_input)
+    command, args = parse_input(user_input)
+    if command in ("exit", "close"):
+        print("Good bye!")
+        break
     handler = commands.get(command)
     if not handler:
         print("Invalid command.")
         continue
-    result = handler(args)
+    result = handler(*args)
     print(result)
-    if command in ("exit", "close"):
-        break
