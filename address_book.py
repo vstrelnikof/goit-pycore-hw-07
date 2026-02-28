@@ -33,7 +33,7 @@ class AddressBook(UserDict):
     def change_contact(self, name: str, old_phone: str, new_phone: str) -> str:
         record: Record | None = self.find(name)
         if not record:
-            raise KeyError(name)
+            raise KeyError(f"No contacts found: {name}")
         if record.edit_phone(old_phone, new_phone):
             return "Phone updated."
         else:
@@ -42,8 +42,8 @@ class AddressBook(UserDict):
     @input_error
     def show_phone(self, name: str) -> str:
         record: Record | None = self.find(name)
-        if not record:
-            raise KeyError(name)
+        if not record or not record.phones:
+            return "Phones not found."
         return f"{name}: {', '.join(p.value for p in record.phones)}"
 
     @input_error
@@ -56,7 +56,7 @@ class AddressBook(UserDict):
     def add_birthday(self, name: str, date: str) -> str:
         record: Record | None = self.find(name)
         if not record:
-            return "Contact not found."
+            raise KeyError(f"No contacts found: {name}")
         record.add_birthday(date)
         return "Birthday added."
 
